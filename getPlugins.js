@@ -4,11 +4,20 @@
 
 import com.hivext.api.Response;
 
-let resp = api.env.control.ExecCmdByGroup( envName, session, "cp", toJSON([{ command: "wp plugin list --format=json --path=/var/www/webroot/ROOT/" }]));
+var envInfo = jelastic.env.control.GetEnvInfo(envName, session);
+
+if (envInfo.result != 0) return envInfo;
+    
+for (var i = 0, k = envInfo.nodes; i < k.length; i++) {
+    if (k[i].nodeGroup == 'cp' && k[i].ismaster)
+        nodeId = k[i].id;
+}
+
+var resp = api.env.control.ExecCmdById(envName, session, nodeId, toJSON([{ command: "wp plugin list --format=json --path=/var/www/webroot/ROOT/" }]));
 
 if (resp.result != 0) return resp;
 
-let scriptResp;
+var scriptResp;
 
 try {
     scriptResp = JSON.parse(resp.responses[0].out);
