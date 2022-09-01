@@ -21,15 +21,23 @@ log(){
 execResponse(){
   local result=$1
   local response=$2
-  output=$(jq -cn --argjson  result "$result" --arg response "${response}"  '{result: $result, response: $response}')
-  echo "${output}"
+  local isJSON="$3"
+
+  if ${isJSON}; then
+    output=$(jq -cn --raw-output --argjson result "$result" --argjson response "${response}" '{result: $result, response: $response}')
+    echo -----json
+  else
+    output=$(jq -cn --raw-output --argjson result "$result" --arg response "${response}" '{result: $result, response: $response}')
+  fi
+  echo ---2 ${output}
 }
 
 execAction(){
   local action="$1"
   local message="$2"
+  local isJSON="$3"
 
-  stderr=$( { ${action}; } 2>&1 ) && { log "${message}...done"; execResponse "${SUCCESS_CODE}" "$( ${action} )" ; } || {
+  stderr=$( { ${action}; } 2>&1 ) && { log "${message}...done"; execResponse "${SUCCESS_CODE}" "$( ${action} )" "${isJSON}" ; } || {
     error="${message} failed, please check ${RUN_LOG} for details"
     execResponse "${FAIL_CODE}" "${error}"
     log "${message}...failed\n==============ERROR==================\n${stderr}\n============END ERROR================";
@@ -47,11 +55,11 @@ getPluginsList(){
 
 case ${1} in
     getVersion)
-        execAction "getCoreVersion" 'Get core version'
+        execAction "getCoreVersion" 'Get core version' 'false'
         ;;
 
     getPlugins)
-        execAction "getPluginsList" 'Get plugins list'
+        execAction "getPluginsList" 'Get plugins list' 'true'
         ;;
 
 esac
