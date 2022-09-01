@@ -38,7 +38,7 @@ execAction(){
 
   stderr=$( { ${action}; } 2>&1 ) && { log "${message}...done"; execResponse "${SUCCESS_CODE}" "$( ${action} )" "${isJSON}" ; } || {
     error="${message} failed, please check ${RUN_LOG} for details"
-    execResponse "${FAIL_CODE}" "${error}"
+    execResponse "${FAIL_CODE}" "${error}" "false"
     log "${message}...failed\n==============ERROR==================\n${stderr}\n============END ERROR================";
     exit 0
   }
