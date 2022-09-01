@@ -25,11 +25,10 @@ execResponse(){
 
   if ${isJSON}; then
     output=$(jq -cn --raw-output --argjson result "$result" --argjson response "${response}" '{result: $result, response: $response}')
-    echo -----json
   else
     output=$(jq -cn --raw-output --argjson result "$result" --arg response "${response}" '{result: $result, response: $response}')
   fi
-  echo ---2 ${output}
+  echo ${output}
 }
 
 execAction(){
