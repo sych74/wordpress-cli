@@ -1,14 +1,13 @@
 #!/bin/bash
 
 WP_PATH="/var/www/webroot/ROOT"
-WP=`which wp`
 RUN_LOG="/tmp/japp.log"
 SUCCESS_CODE=0
 FAIL_CODE=99
 
 wpCommandExec(){
   command="$1"
-  $WP --path=$WP_PATH $command
+  ~/bin/wp --path=$WP_PATH $command
 }
 
 echo "" > ${RUN_LOG}
