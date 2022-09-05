@@ -13,7 +13,7 @@ for (var i = 0, k = envInfo.nodes; i < k.length; i++) {
         nodeId = k[i].id;
 }
 
-var resp = api.env.control.ExecCmdById(envName, session, nodeId, toJSON([{ command: "wp plugin list --format=json --path=/var/www/webroot/ROOT/" }]));
+var resp = api.env.control.ExecCmdById(envName, session, nodeId, toJSON([{ command: "curl --silent https://raw.githubusercontent.com/sych74/wordpress-cli/main/japp.sh > ~/bin/japp.sh && bash ~/bin/japp.sh getPlugins" }]));
 
 if (resp.result != 0) return resp;
 
@@ -25,4 +25,4 @@ try {
     scriptResp = { result: Response.ERROR_UNKNOWN, error: ex, resp: resp }
 }
 
-return { result: 0, plugins: scriptResp };
+return { result: 0, out: scriptResp };
