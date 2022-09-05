@@ -52,6 +52,10 @@ installWP_CLI(){
   ~/bin/wp --info  2>&1;
 }
 
+coreUpdate(){
+  wpCommandExec 'core update'
+}
+
 getCoreVersion(){
   wpCommandExec 'core version'
 }
@@ -69,8 +73,12 @@ case ${1} in
         ;;
 
     getPlugins)
-        execAction "getPluginsList" 'Get plugins list' 'true'
+        execAction "getPluginsList" 'Get plugins list'
         execResponse "${SUCCESS_CODE}" "${stdout}" "true"
         ;;
 
+    coreUpdate)
+        execAction "coreUpdate" 'Wordpress core update'
+        execAction "getCoreVersion" 'Get core version'
+        execResponse "${SUCCESS_CODE}" "${stdout}" "false"
 esac
