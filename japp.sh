@@ -83,7 +83,7 @@ case ${1} in
 
     checkForUpdate)
         execAction "checkForUpdate" 'Checks for WordPress updates'
-        execResponse "${SUCCESS_CODE}" "${stdout}" "true"
+	[ x${stdout} == x"" ] && { execResponse "${SUCCESS_CODE}" "WordPress is up to date" "false"; } || { execResponse "${SUCCESS_CODE}" "${stdout}" "true"; }
         ;;
 
     coreUpdate)
