@@ -64,6 +64,10 @@ getPluginsList(){
   wpCommandExec 'plugin list --format=json'
 }
 
+checkForUpdate(){
+  wpCommandExec 'core check-update --fields=version,update_type --format=json'
+}
+
 execAction "installWP_CLI" 'Install WP-CLI'
 
 case ${1} in
@@ -74,6 +78,11 @@ case ${1} in
 
     getPlugins)
         execAction "getPluginsList" 'Get plugins list'
+        execResponse "${SUCCESS_CODE}" "${stdout}" "true"
+        ;;
+
+    checkForUpdate)
+        execAction "checkForUpdate" 'Checks for WordPress updates'
         execResponse "${SUCCESS_CODE}" "${stdout}" "true"
         ;;
 
